@@ -1,5 +1,12 @@
+using Microsoft.EntityFrameworkCore;
+using ProductApp.Models;
+
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<ProductApp.Models.ProductContext>();
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<ProductContext>(options =>
+    options.UseSqlServer(connectionString));
 
 builder.Services.AddControllersWithViews();
 
@@ -8,7 +15,6 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -18,6 +24,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
 
 app.MapControllerRoute(
     name: "default",
