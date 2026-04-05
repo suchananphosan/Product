@@ -1,0 +1,88 @@
+﻿@model ProductApp.Models.Productmaster
+
+@{
+    ViewData["Title"] = "เพิ่มสินค้าใหม่";
+}
+
+<div class="row mb-4">
+    <div class="col-md-8 mx-auto">
+        <h2 style="font-weight: 600; letter-spacing: 1px; color: #333;">เพิ่มสินค้าใหม่</h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb" style="background: none; padding: 0; font-size: 13px;">
+                <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none text-muted">รายการสินค้า</a></li>
+                <li class="breadcrumb-item active" aria-current="page">สร้างรายการใหม่</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card border-0 shadow-sm" style="border-radius: 15px;">
+            <div class="card-body p-5">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="row g-4">
+                        @* ชื่อสินค้า *@
+                        <div class="col-md-12">
+                            <label asp-for="Productname" class="form-label fw-bold" style="font-size: 14px; color: #555;">ชื่อสินค้า</label>
+                            <input asp-for="Productname" class="form-control form-control-lg border-0 bg-light"
+                                   placeholder="กรอกชื่อสินค้า..." style="border-radius: 10px; font-size: 16px;" />
+                            <span asp-validation-for="Productname" class="text-danger" style="font-size: 12px;"></span>
+                        </div>
+
+                        @* ประเภทสินค้า *@
+                        <div class="col-md-6">
+                            <label asp-for="Producttypeid" class="form-label fw-bold" style="font-size: 14px; color: #555;">รหัสประเภทสินค้า</label>
+                            <input asp-for="Producttypeid" class="form-control border-0 bg-light"
+                                   placeholder="เช่น 1, 2, 3" style="border-radius: 10px; padding: 12px;" />
+                            <span asp-validation-for="Producttypeid" class="text-danger" style="font-size: 12px;"></span>
+                        </div>
+
+                        @* สถานะสินค้า *@
+                        <div class="col-md-6">
+                            <label asp-for="Productstatus" class="form-label fw-bold" style="font-size: 14px; color: #555;">สถานะ (1=Active, 0=Inactive)</label>
+                            <input asp-for="Productstatus" class="form-control border-0 bg-light"
+                                   style="border-radius: 10px; padding: 12px;" />
+                            <span asp-validation-for="Productstatus" class="text-danger" style="font-size: 12px;"></span>
+                        </div>
+
+                        @* ผู้สร้าง *@
+                        <div class="col-md-6">
+                            <label asp-for="Createuser" class="form-label fw-bold" style="font-size: 14px; color: #555;">ชื่อผู้บันทึก</label>
+                            <input asp-for="Createuser" class="form-control border-0 bg-light"
+                                   value="Admin" style="border-radius: 10px; padding: 12px;" />
+                            <span asp-validation-for="Createuser" class="text-danger" style="font-size: 12px;"></span>
+                        </div>
+
+                        @* วันที่บันทึก *@
+                        <div class="col-md-6">
+                            <label asp-for="Createdate" class="form-label fw-bold" style="font-size: 14px; color: #555;">วันที่บันทึก</label>
+                            <input asp-for="Createdate" type="date" class="form-control border-0 bg-light"
+                                   value="@DateTime.Now.ToString("yyyy-MM-dd")" style="border-radius: 10px; padding: 12px;" />
+                            <span asp-validation-for="Createdate" class="text-danger" style="font-size: 12px;"></span>
+                        </div>
+                    </div>
+
+                    <hr class="my-5" style="opacity: 0.1;">
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a asp-action="Index" class="text-decoration-none text-muted" style="font-size: 14px;">
+                            <i class="bi bi-arrow-left me-1"></i> ย้อนกลับ
+                        </a>
+                        <button type="submit" class="btn btn-dark px-5 py-2 shadow-sm" style="border-radius: 10px; font-weight: 500;">
+                            บันทึกข้อมูลสินค้า
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,64 @@
+﻿@model ProductApp.Models.Productmaster
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Productmaster</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Productid" />
+            <div class="form-group">
+                <label asp-for="Productname" class="control-label"></label>
+                <input asp-for="Productname" class="form-control" />
+                <span asp-validation-for="Productname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Producttypeid" class="control-label"></label>
+                <input asp-for="Producttypeid" class="form-control" />
+                <span asp-validation-for="Producttypeid" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Productstatus" class="control-label"></label>
+                <input asp-for="Productstatus" class="form-control" />
+                <span asp-validation-for="Productstatus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Createuser" class="control-label"></label>
+                <input asp-for="Createuser" class="form-control" />
+                <span asp-validation-for="Createuser" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Createdate" class="control-label"></label>
+                <input asp-for="Createdate" class="form-control" />
+                <span asp-validation-for="Createdate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Updateuser" class="control-label"></label>
+                <input asp-for="Updateuser" class="form-control" />
+                <span asp-validation-for="Updateuser" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Updatedate" class="control-label"></label>
+                <input asp-for="Updatedate" class="form-control" />
+                <span asp-validation-for="Updatedate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
