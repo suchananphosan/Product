@@ -15,7 +15,8 @@ Hoe to Run :
 3. รันโปรแกรม
 
 Screenshots :
-<img width="717" height="471" alt="image" src="https://github.com/user-attachments/assets/ecc46789-d944-4aef-b41b-6ea2313e87bd" />
+<img width="1919" height="892" alt="image" src="https://github.com/user-attachments/assets/7adfbe91-e054-4c27-b934-9cc89fb6612f" />
+
 
 
 
