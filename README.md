@@ -2,10 +2,10 @@
 สร้างและออกแบบ Application 1 หน้า ตั้งค่ารหัสสินค้า การทำงานหลักของหน้าจอคือ ค้นหา/เพิ่ม/แก้ไข/ยกเลิก ข้อมูลใน Table.ProductMaster ได้
 
 Tech Stack : 
-Backend: C# ASP.NET Core 8.0 (MVC)
-Frontend: Razor Pages, Bootstrap 5.3, jQuery AJAX
-Database: SQL Server (Entity Framework Core)
-Library: SweetAlert2, Bootstrap Icons
+1. Backend: C# ASP.NET Core 8.0 (MVC)
+2. Frontend: Razor Pages, Bootstrap 5.3, jQuery AJAX
+3. Database: SQL Server (Entity Framework Core)
+4. Library: SweetAlert2, Bootstrap Icons
 
 Features : 
 1. ค้นหาสินค้า พิมพ์รหัสสินค้าหรือชื่อสินค้าในช่องค้นหาเพื่อค้นหาสินค้าได้ง่ายยิ่งขึ้น และหากข้อมูลมีจำนวนมากจะถูกแบ่งหน้าให้อัตโนมัติ
