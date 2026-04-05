@@ -255,3 +255,4 @@ C:\Users\suchanan\source\repos\ProductApp\ProductApp\obj\Debug\net8.0\refint\Pro
 C:\Users\suchanan\source\repos\ProductApp\ProductApp\obj\Debug\net8.0\ProductApp.pdb
 C:\Users\suchanan\source\repos\ProductApp\ProductApp\obj\Debug\net8.0\ProductApp.genruntimeconfig.cache
 C:\Users\suchanan\source\repos\ProductApp\ProductApp\obj\Debug\net8.0\ref\ProductApp.dll
+C:\Users\suchanan\source\repos\ProductApp\ProductApp\obj\Debug\net8.0\ProductApp.sourcelink.json

@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<ProductApp.Models.Productmaster>
 
 @{
-    ViewData["Title"] = "จัดการข้อมูลสินค้า";
+    ViewData["Title"] = "Product";
 }
 
 <style>
@@ -12,9 +12,14 @@
         --sabina-text: #2d1a47;
     }
 
-    body { background-color: #fcfaff; }
+    body {
+        background-color: #fcfaff;
+    }
 
-    .header-title { font-weight: 600; color: var(--sabina-text); }
+    .header-title {
+        font-weight: 600;
+        color: var(--sabina-text);
+    }
 
     /* Custom Buttons */
     .btn-sabina-primary {
@@ -24,11 +29,12 @@
         border-radius: 50px;
         transition: all 0.3s ease;
     }
-    .btn-sabina-primary:hover {
-        background-color: var(--sabina-purple-hover) !important;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(90, 55, 145, 0.2);
-    }
+
+        .btn-sabina-primary:hover {
+            background-color: var(--sabina-purple-hover) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(90, 55, 145, 0.2);
+        }
 
     .btn-sabina-light {
         background-color: #ffffff !important;
@@ -36,79 +42,103 @@
         border: 1px solid #eee !important;
         border-radius: 50px;
     }
-    .btn-sabina-light:hover {
-        background-color: var(--sabina-purple-light) !important;
-        color: var(--sabina-purple) !important;
+
+        .btn-sabina-light:hover {
+            background-color: var(--sabina-purple-light) !important;
+            color: var(--sabina-purple) !important;
+        }
+
+    .card-custom {
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
     }
 
-    /* Table Styling */
-    .card-custom { border-radius: 15px; border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-    .table thead { background-color: #f8f5ff; }
-    .table thead th { color: var(--sabina-purple); font-weight: 500; border: none; }
-    .product-id { color: var(--sabina-purple); font-weight: 600; }
-    
-    .badge-active { background-color: var(--sabina-purple-light); color: var(--sabina-purple); }
-    .badge-inactive { background-color: #f8f9fa; color: #aaa; }
-
-    /* Icon Actions */
-    .icon-btn { cursor: pointer; transition: 0.2s; font-size: 1.2rem; }
-    .icon-edit { color: #6f42c1; }
-    .icon-edit:hover { color: var(--sabina-purple-hover); transform: scale(1.1); }
-    .icon-delete { color: #dc3545; }
-    .icon-delete:hover { transform: scale(1.1); }
-
-/* 1. ส่วนนี้ไว้นอก Media Query (แสดงผลทุกหน้าจอ) */
-.search-group {
-    border-radius: 50px !important; /* ความโค้งระดับเดียวกับปุ่ม */
-    overflow: hidden;
-    background-color: #fff;
-    border: 1px solid #eee !important;
-    transition: all 0.3s ease;
-    width: 280px; /* กำหนดความกว้างมาตรฐาน */
-}
-
-.search-group:focus-within {
-    border-color: var(--sabina-purple) !important;
-    box-shadow: 0 0 0 0.2rem rgba(90, 55, 145, 0.1) !important;
-}
-
-.search-group .input-group-text {
-    background-color: transparent !important;
-    padding-left: 1.2rem;
-    border: none !important;
-}
-
-.search-group input {
-    padding-top: 0.6rem;
-    padding-bottom: 0.6rem;
-    font-size: 14px;
-    border: none !important;
-}
-
-/* 2. ส่วนนี้สำหรับปรับแต่งเฉพาะในมือถือ (จอเล็กกว่า 768px) */
-@@media (max-width: 768px) {
-    .search-group { 
-        width: 100% !important; /* ในมือถือให้ยืดเต็มจอ */
-        max-width: none !important; 
+    .table thead {
+        background-color: #f8f5ff;
     }
-    .btn-add-mobile { 
-        width: 100%; 
+
+        .table thead th {
+            color: var(--sabina-purple);
+            font-weight: 500;
+            border: none;
+        }
+
+    .product-id {
+        color: var(--sabina-purple);
+        font-weight: 600;
+    }
+
+    .badge-active {
+        background-color: var(--sabina-purple-light);
+        color: var(--sabina-purple);
+    }
+
+    .badge-inactive {
+        background-color: #f8f9fa;
+        color: #aaa;
+    }
+
+    .icon-btn {
+        cursor: pointer;
+        transition: 0.2s;
+        font-size: 1.2rem;
+    }
+
+    .icon-edit {
+        color: #6f42c1;
+    }
+
+        .icon-edit:hover {
+            color: var(--sabina-purple-hover);
+            transform: scale(1.1);
+        }
+
+    .icon-delete {
+        color: #dc3545;
+    }
+
+        .icon-delete:hover {
+            transform: scale(1.1);
+        }
+
+    .search-group {
         border-radius: 50px !important;
+        overflow: hidden;
+        background-color: #fff;
+        border: 1px solid #eee !important;
+        transition: all 0.3s ease;
+        width: 280px;
     }
-}
+
+        .search-group:focus-within {
+            border-color: var(--sabina-purple) !important;
+            box-shadow: 0 0 0 0.2rem rgba(90, 55, 145, 0.1) !important;
+        }
+
+    @@media (max-width: 768px) {
+        .search-group {
+            width: 100% !important;
+            max-width: none !important;
+        }
+
+        .btn-add-mobile {
+            width: 100%;
+            border-radius: 50px !important;
+        }
+    }
 </style>
 
 <div class="row mb-4 gy-3 align-items-center">
     <div class="col-12 col-md-6">
         <h2 class="header-title m-0">Product</h2>
-        <p class="text-muted mb-0" style="font-size: 13px;">SABINA INVENTORY - Management System</p>
     </div>
     <div class="col-12 col-md-6 text-md-end">
         <div class="d-flex flex-column flex-md-row justify-content-md-end gap-2">
-            <div class="input-group input-group-sm search-group shadow-sm rounded" style="width: 280px;">
+            <div class="input-group input-group-sm search-group shadow-sm rounded">
                 <span class="input-group-text bg-white border-0"><i class="bi bi-search text-muted"></i></span>
-                <input type="text" id="searchInput" class="form-control border-0" 
-                       placeholder="ค้นหารวดเร็ว..." value="@Context.Request.Query["searchString"]">
+                <input type="text" id="searchInput" class="form-control border-0"
+                       placeholder="ค้นหา..." value="@ViewBag.SearchString">
             </div>
             <button type="button" class="btn btn-sabina-primary btn-add-mobile px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#createModal">
                 <i class="bi bi-plus-lg me-1"></i> เพิ่มสินค้าใหม่
@@ -117,8 +147,8 @@
     </div>
 </div>
 
-<div class="card card-custom overflow-hidden" style="min-height: 60vh;">
-    <div id="productTable">
+<div class="card card-custom overflow-hidden mb-3">
+    <div id="productTableContainer">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0" style="min-width: 800px;">
                 <thead>
@@ -132,10 +162,12 @@
                     </tr>
                 </thead>
                 <tbody style="font-size: 14px;">
-                    @if (!Model.Any()) {
+                    @if (!Model.Any())
+                    {
                         <tr><td colspan="6" class="text-center py-5 text-muted">ไม่พบข้อมูลในระบบ</td></tr>
                     }
-                    @foreach (var item in Model) {
+                    @foreach (var item in Model)
+                    {
                         <tr>
                             <td class="ps-4 product-id">@item.Productid</td>
                             <td><div class="text-truncate" style="max-width: 220px;">@item.Productname</div></td>
@@ -150,9 +182,9 @@
                             </td>
                             <td class="pe-4 text-end">
                                 <div class="d-flex justify-content-end gap-3">
-                                    <i class="bi bi-pencil-square icon-btn icon-edit" 
+                                    <i class="bi bi-pencil-square icon-btn icon-edit"
                                        onclick="openEditModal('@item.Productid', '@item.Productname', '@item.Producttypeid', '@item.Productstatus')"></i>
-                                    <i class="bi bi-trash icon-btn icon-delete" 
+                                    <i class="bi bi-trash icon-btn icon-delete"
                                        onclick="confirmDelete('@item.Productid')"></i>
                                 </div>
                             </td>
@@ -161,28 +193,30 @@
                 </tbody>
             </table>
         </div>
-
-        <div class="d-flex justify-content-center py-4 bg-white border-top">
-            <nav class="d-flex align-items-center bg-light rounded-pill px-3 py-1 border shadow-sm">
-                <a class="btn btn-link text-dark p-1 @(!ViewBag.HasPreviousPage ? "disabled text-muted" : "")" 
-                   href="@Url.Action("Index", new { pageNumber = ViewBag.CurrentPage - 1, searchString = ViewBag.SearchString })">
-                    <i class="bi bi-chevron-left"></i>
-                </a>
-                <span class="mx-3 text-muted" style="font-size: 12px;">หน้า @ViewBag.CurrentPage / @ViewBag.TotalPages</span>
-                <a class="btn btn-link text-dark p-1 @(!ViewBag.HasNextPage ? "disabled text-muted" : "")" 
-                   href="@Url.Action("Index", new { pageNumber = ViewBag.CurrentPage + 1, searchString = ViewBag.SearchString })">
-                    <i class="bi bi-chevron-right"></i>
-                </a>
-            </nav>
-        </div>
     </div>
+</div>
+
+<div id="paginationContainer" class="d-flex justify-content-center pb-4">
+    <nav class="d-flex align-items-center px-3 py-1" style="gap: 5px;">
+        <a class="btn btn-link text-decoration-none p-1 @(!ViewBag.HasPreviousPage ? "disabled text-muted" : "text-sabina-purple")"
+           href="@Url.Action("Index", new { pageNumber = ViewBag.CurrentPage - 1, searchString = ViewBag.SearchString })">
+            <i class="bi bi-arrow-left-circle-fill" style="font-size: 1rem; opacity: 0.6;"></i>
+        </a>
+        <span class="mx-2 text-muted" style="font-size: 11px; min-width: 60px; text-align: center; letter-spacing: 1px;">
+            หน้า @ViewBag.CurrentPage / @ViewBag.TotalPages
+        </span>
+        <a class="btn btn-link text-decoration-none p-1 @(!ViewBag.HasNextPage ? "disabled text-muted" : "text-sabina-purple")"
+           href="@Url.Action("Index", new { pageNumber = ViewBag.CurrentPage + 1, searchString = ViewBag.SearchString })">
+            <i class="bi bi-arrow-right-circle-fill" style="font-size: 1rem; opacity: 0.6;"></i>
+        </a>
+    </nav>
 </div>
 
 <div class="modal fade" id="createModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow" style="border-radius: 20px;">
             <div class="modal-header border-0 pb-0 pt-4 px-4">
-                <h5 class="fw-bold m-0" style="color: var(--sabina-purple);">เพิ่มข้อมูลใหม่</h5>
+                <h5 class="fw-bold m-0" style="color: var(--sabina-purple);">เพิ่มสินค้าใหม่</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form asp-action="Create" method="post">
@@ -194,22 +228,16 @@
                         </div>
                         <div class="col-12">
                             <label class="form-label small fw-bold text-secondary">ชื่อสินค้า</label>
-                            <input name="Productname" class="form-control border-0 bg-light py-2" required placeholder="ระบุชื่อรุ่น" />
+                            <input name="Productname" class="form-control border-0 bg-light py-2" required placeholder="ระบุชื่อสินค้า" />
                         </div>
-                        <div class="col-6">
+                        <div class="col-12">
                             <label class="form-label small fw-bold text-secondary">ประเภท</label>
                             <select name="Producttypeid" class="form-select border-0 bg-light py-2">
-                                <option value="B">เสื้อชั้นใน (B)</option>
-                                <option value="U">กางเกงใน (U)</option>
+                                <option value="B">เสื้อชั้นใน</option>
+                                <option value="U">กางเกงใน</option>
                             </select>
                         </div>
-                        <div class="col-6">
-                            <label class="form-label small fw-bold text-secondary">สถานะ</label>
-                            <select name="Productstatus" class="form-select border-0 bg-light py-2">
-                                <option value="0">ใช้งาน</option>
-                                <option value="9">ยกเลิก</option>
-                            </select>
-                        </div>
+                        <input type="hidden" name="Productstatus" value="0" />
                         <input type="hidden" name="Createuser" value="Suchanan.S" />
                     </div>
                 </div>
@@ -241,20 +269,14 @@
                             <label class="form-label small fw-bold text-secondary">ชื่อสินค้า</label>
                             <input id="editProductName" name="Productname" class="form-control border-0 bg-light py-2" required />
                         </div>
-                        <div class="col-6">
+                        <div class="col-12">
                             <label class="form-label small fw-bold text-secondary">ประเภท</label>
                             <select id="editProductTypeId" name="Producttypeid" class="form-select border-0 bg-light py-2">
-                                <option value="B">เสื้อชั้นใน (B)</option>
-                                <option value="U">กางเกงใน (U)</option>
+                                <option value="B">เสื้อชั้นใน</option>
+                                <option value="U">กางเกงใน</option>
                             </select>
                         </div>
-                        <div class="col-6">
-                            <label class="form-label small fw-bold text-secondary">สถานะ</label>
-                            <select id="editProductStatus" name="Productstatus" class="form-select border-0 bg-light py-2">
-                                <option value="0">ใช้งาน</option>
-                                <option value="9">ยกเลิก</option>
-                            </select>
-                        </div>
+                        <input type="hidden" id="editProductStatus" name="Productstatus" />
                         <input type="hidden" name="Updateuser" value="Suchanan.S" />
                     </div>
                 </div>
@@ -269,33 +291,18 @@
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
         $(document).ready(function () {
-            // การแจ้งเตือนเมื่อทำรายการสำเร็จ/ผิดพลาด
             const successMsg = '@Html.Raw(TempData["Success"])';
             const errorMsg = '@Html.Raw(TempData["Error"])';
 
             if (successMsg) {
-                Swal.fire({ 
-                    icon: 'success', 
-                    title: 'สำเร็จ!', 
-                    text: successMsg, 
-                    timer: 1800, 
-                    showConfirmButton: false,
-                    fontFamily: 'Sarabun'
-                });
+                Swal.fire({ icon: 'success', title: 'สำเร็จ!', text: successMsg, timer: 1800, showConfirmButton: false });
             }
             if (errorMsg) {
-                Swal.fire({ 
-                    icon: 'error', 
-                    title: 'เกิดข้อผิดพลาด', 
-                    text: errorMsg, 
-                    confirmButtonColor: '#5a3791' 
-                });
+                Swal.fire({ icon: 'error', title: 'เกิดข้อผิดพลาด', text: errorMsg, confirmButtonColor: '#5a3791' });
             }
 
-            // ระบบ Live Search
             $('#searchInput').on('keyup', function () {
                 var value = $(this).val();
                 $.ajax({
@@ -303,14 +310,13 @@
                     type: 'GET',
                     data: { searchString: value, pageNumber: 1 },
                     success: function (result) {
-                        var newTable = $(result).find('#productTable').html();
-                        $('#productTable').html(newTable);
+                        $('#productTableContainer').html($(result).find('#productTableContainer').html());
+                        $('#paginationContainer').html($(result).find('#paginationContainer').html());
                     }
                 });
             });
         });
 
-        // ฟังก์ชันเปิด Modal แก้ไข
         function openEditModal(id, name, type, status) {
             $('#oldProductId').val(id);
             $('#editProductId').val(id);
@@ -320,23 +326,19 @@
             $('#editModal').modal('show');
         }
 
-        // ฟังก์ชันลบ (ที่เจอปัญหาไม่เด้ง) - แก้ไขให้แล้วครับ!
         function confirmDelete(id) {
-            console.log("Delete clicked for ID:", id); // ตรวจสอบใน Console ว่าฟังก์ชันทำงานไหม
-            
             Swal.fire({
                 title: 'ยืนยันการยกเลิก?',
                 text: "รหัสสินค้า " + id + " จะถูกเปลี่ยนสถานะเป็นยกเลิก",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#5a3791', // สีม่วง Sabina
+                confirmButtonColor: '#5a3791',
                 cancelButtonColor: '#f8f9fa',
                 confirmButtonText: 'ยืนยัน',
                 cancelButtonText: '<span style="color: #666">ยกเลิก</span>',
-                reverseButtons: true // สลับตำแหน่งปุ่มให้ดูใช้ง่ายขึ้น
+                reverseButtons: true
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // ส่งไปที่ Action FastDelete
                     window.location.href = '@Url.Action("FastDelete", "Productmasters")/' + id;
                 }
             });

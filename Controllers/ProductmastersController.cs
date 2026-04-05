@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -16,14 +17,11 @@ namespace ProductApp.Controllers
             _context = context;
         }
 
-        // ===================== INDEX (รวม Search + Pagination) =====================
         public async Task<IActionResult> Index(string searchString, int? pageNumber)
         {
             int pageSize = 10;
-
             var products = from p in _context.Productmasters select p;
 
-            // 🔍 Search
             if (!string.IsNullOrEmpty(searchString))
             {
                 products = products.Where(s =>
@@ -31,76 +29,66 @@ namespace ProductApp.Controllers
                     s.Productid.Contains(searchString));
             }
 
-            // 📅 Sort
             products = products.OrderByDescending(p => p.Createdate);
 
-            // 📄 Pagination
             int count = await products.CountAsync();
-            int currentPage = pageNumber ?? 1;
+            int currentPage = (count > 0) ? (pageNumber ?? 1) : 0; 
             int totalPages = (int)Math.Ceiling(count / (double)pageSize);
+            int displayTotalPages = (count > 0) ? totalPages : 0; 
 
             var items = await products
-                .Skip((currentPage - 1) * pageSize)
+                .Skip((Math.Max(1, currentPage) - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
             ViewBag.CurrentPage = currentPage;
-            ViewBag.TotalPages = totalPages;
+            ViewBag.TotalPages = displayTotalPages;
+            ViewBag.TotalCount = count;
+            ViewBag.SearchString = searchString;
             ViewBag.HasPreviousPage = currentPage > 1;
             ViewBag.HasNextPage = currentPage < totalPages;
-            ViewBag.SearchString = searchString;
 
             return View(items);
         }
 
-        // ===================== CREATE =====================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(
-            [Bind("Productid,Productname,Producttypeid,Productstatus,Createuser")]
-            Productmaster productmaster)
+        public async Task<IActionResult> Create([Bind("Productid,Productname,Producttypeid,Productstatus,Createuser")] Productmaster productmaster)
         {
             if (!ModelState.IsValid)
             {
-                TempData["Error"] = "ข้อมูลไม่ถูกต้อง";
+                TempData["Error"] = "ข้อมูลไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง";
                 return RedirectToAction(nameof(Index));
             }
 
             try
             {
-                bool isDuplicate = await _context.Productmasters
-                    .AnyAsync(e => e.Productid == productmaster.Productid);
-
+                // เช็ค Primary Key ซ้ำ
+                bool isDuplicate = await _context.Productmasters.AnyAsync(e => e.Productid == productmaster.Productid);
                 if (isDuplicate)
                 {
-                    TempData["Error"] = "รหัสสินค้าซ้ำ";
+                    TempData["Error"] = "ไม่สามารถเพิ่มได้เนื่องจากรหัสสินค้าซ้ำ";
                     return RedirectToAction(nameof(Index));
                 }
 
                 productmaster.Createdate = DateTime.Now;
-
                 _context.Productmasters.Add(productmaster);
                 await _context.SaveChangesAsync();
 
-                TempData["Success"] = "เพิ่มข้อมูลสำเร็จ";
+                TempData["Success"] = "เพิ่มข้อมูลสินค้าสำเร็จ";
             }
             catch (Exception ex)
             {
-                TempData["Error"] = "Error: " + ex.Message;
+                TempData["Error"] = "เกิดข้อผิดพลาด: " + ex.Message;
             }
 
             return RedirectToAction(nameof(Index));
         }
 
-        // ===================== EDIT =====================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(
-            string id,
-            [Bind("Productid,Productname,Producttypeid,Productstatus,Updateuser")]
-            Productmaster productmaster)
+        public async Task<IActionResult> Edit(string id, [Bind("Productid,Productname,Producttypeid,Productstatus,Updateuser")] Productmaster productmaster)
         {
-            // กัน validation field ที่ไม่ได้ส่งมา
             ModelState.Remove("Createuser");
             ModelState.Remove("Createdate");
 
@@ -112,76 +100,54 @@ namespace ProductApp.Controllers
 
             try
             {
-                var existing = await _context.Productmasters.FindAsync(id);
-
+                var existing = await _context.Productmasters.AsNoTracking().FirstOrDefaultAsync(p => p.Productid == id);
                 if (existing == null)
                 {
-                    TempData["Error"] = "ไม่พบข้อมูล";
+                    TempData["Error"] = "ไม่พบข้อมูลที่ต้องการแก้ไข";
                     return RedirectToAction(nameof(Index));
                 }
 
-                // 🔥 เช็คว่าเปลี่ยน ID ไหม
-                bool isIdChanged = !string.Equals(
-                    id?.Trim(),
-                    productmaster.Productid?.Trim(),
-                    StringComparison.OrdinalIgnoreCase
-                );
+                bool isIdChanged = !string.Equals(id?.Trim(), productmaster.Productid?.Trim(), StringComparison.OrdinalIgnoreCase);
 
-                // ===================== เปลี่ยน ID =====================
                 if (isIdChanged)
                 {
-                    bool isDuplicate = await _context.Productmasters
-                        .AnyAsync(p => p.Productid == productmaster.Productid);
-
+                    bool isDuplicate = await _context.Productmasters.AnyAsync(p => p.Productid == productmaster.Productid);
                     if (isDuplicate)
                     {
-                        TempData["Error"] = "รหัสสินค้าใหม่ซ้ำ";
+                        TempData["Error"] = "รหัสสินค้าใหม่ซ้ำกับที่มีอยู่ในระบบ";
                         return RedirectToAction(nameof(Index));
                     }
 
                     using var transaction = await _context.Database.BeginTransactionAsync();
-
                     try
                     {
-                        var newData = new Productmaster
-                        {
-                            Productid = productmaster.Productid,
-                            Productname = productmaster.Productname,
-                            Producttypeid = productmaster.Producttypeid,
-                            Productstatus = productmaster.Productstatus,
-                            Createuser = existing.Createuser,
-                            Createdate = existing.Createdate,
-                            Updateuser = productmaster.Updateuser,
-                            Updatedate = DateTime.Now
-                        };
-
-                        _context.Productmasters.Remove(existing);
+                        var oldData = await _context.Productmasters.FindAsync(id);
+                        _context.Productmasters.Remove(oldData);
                         await _context.SaveChangesAsync();
 
-                        _context.Productmasters.Add(newData);
+                        productmaster.Createdate = existing.Createdate;
+                        productmaster.Createuser = existing.Createuser;
+                        productmaster.Updatedate = DateTime.Now;
+                        _context.Productmasters.Add(productmaster);
                         await _context.SaveChangesAsync();
 
                         await transaction.CommitAsync();
-
-                        TempData["Success"] = "แก้ไขสำเร็จ (เปลี่ยนรหัสสินค้า)";
+                        TempData["Success"] = "แก้ไขและเปลี่ยนรหัสสินค้าสำเร็จ";
                     }
                     catch
                     {
                         await transaction.RollbackAsync();
-                        TempData["Error"] = "เกิดข้อผิดพลาด";
+                        throw;
                     }
                 }
-                // ===================== ไม่เปลี่ยน ID =====================
                 else
                 {
-                    existing.Productname = productmaster.Productname;
-                    existing.Producttypeid = productmaster.Producttypeid;
-                    existing.Productstatus = productmaster.Productstatus;
-                    existing.Updateuser = productmaster.Updateuser;
-                    existing.Updatedate = DateTime.Now;
+                    productmaster.Createdate = existing.Createdate;
+                    productmaster.Createuser = existing.Createuser;
+                    productmaster.Updatedate = DateTime.Now;
 
+                    _context.Entry(productmaster).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
-
                     TempData["Success"] = "แก้ไขข้อมูลสำเร็จ";
                 }
             }
@@ -193,31 +159,28 @@ namespace ProductApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // ===================== SOFT DELETE =====================
         public async Task<IActionResult> FastDelete(string id)
         {
             try
             {
                 var product = await _context.Productmasters.FindAsync(id);
-
                 if (product != null)
                 {
-                    product.Productstatus = 9;
+                    product.Productstatus = 9; 
                     product.Updateuser = "Suchanan.S";
                     product.Updatedate = DateTime.Now;
 
                     await _context.SaveChangesAsync();
-
-                    TempData["Success"] = "ยกเลิกสินค้าเรียบร้อย";
+                    TempData["Success"] = "ยกเลิกการใช้งานสินค้าเรียบร้อย";
                 }
                 else
                 {
-                    TempData["Error"] = "ไม่พบข้อมูล";
+                    TempData["Error"] = "ไม่พบข้อมูลสินค้า";
                 }
             }
             catch (Exception ex)
             {
-                TempData["Error"] = "Error: " + ex.Message;
+                TempData["Error"] = "เกิดข้อผิดพลาด: " + ex.Message;
             }
 
             return RedirectToAction(nameof(Index));
