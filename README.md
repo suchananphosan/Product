@@ -14,12 +14,11 @@ Features :
 4. ยกเลิกสินค้า กดปุ่มลบหรือไอคอนถังขยะเพื่อเปลี่ยนสถานะใช้งานเป็นสถานะยกเลิก เมื่อกดยืนยันยกเลิก รายการข้อมูลสินค้าจะหายไปจากรายการสินค้า แต่ในฐานข้อมูลจะไม่ถูกลบ
 5.  แสดงรายการสินค้า
 
-Hoe to Run :
+How to Run :
 1. Clone project จาก Repository นี้
-2. เปิดไฟล์ .sln ด้วย Visual Studio 2022
-3. Database Setup: แก้ไข Connection String ใน appsettings.json ให้ตรงกับ SQL Server ของคุณ
-เปิด Package Manager Console แล้วพิมพ์คำสั่ง Update-Database เพื่อสร้าง Table อัตโนมัติ (หรือรัน SQL Script ที่แนบไว้ในโฟลเดอร์ Database)
-4. กดรันโปรแกรมหรือ F5
+2. เปิดไฟล์ ProductApp.csproj 
+3. Database Setup: แก้ไข Connection String ใน appsettings.json ให้ตรงกับ SQL Server ของคุณ และExecute ไฟล์ db_setup.sql ใน SSMS เพื่อสร้างฐานข้อมูลและตาราง
+4. กดรันโปรแกรม Visual Studio 2022 หรือ F5 
 
 Screenshots :
 <img width="1919" height="892" alt="image" src="https://github.com/user-attachments/assets/7adfbe91-e054-4c27-b934-9cc89fb6612f" />
